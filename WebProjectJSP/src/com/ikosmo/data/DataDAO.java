@@ -13,7 +13,7 @@ public class DataDAO extends DBConnection{
 	public static DataDAO getInstance(){
 		return new DataDAO();
 	}
-	//�젅?��붾뱶 ?��붽�
+	//fileName은 배열에 저장되있기때문에 반복문 사용
 	public int dataInsert(DataVO vo){
 		int result = 0;
 		try{
@@ -35,7 +35,7 @@ public class DataDAO extends DBConnection{
 		}finally{dbClose();}
 		return result;
 	}
-	//�젅?��붾뱶 �쟾泥� �꽑�깮
+	//레코드 전체 선택
 	public List<DataVO> selectAllRecord(){
 		List<DataVO> lst = new ArrayList<DataVO>();
 		try{
@@ -49,10 +49,12 @@ public class DataDAO extends DBConnection{
 				vo.setNum(rs.getInt(1));
 				vo.setUserName(rs.getString(2));
 				vo.setTitle(rs.getString(3));
-				//泥⑤��?���씪紐낆?�� ���옣�븷 諛곗�?
+				//파일명 여러개를 담을수있는 배열,첨부파일명을 저장할 배열 
 				String fn[] = new String[5];
 				int p=0;
 				for(int i=0; i<fn.length; i++){
+					//파일명이 null 이 아니거나 공백이 아닐경우 실행 
+					//그러기위해서 int형 변수를 따로 잡아줌
 					if(rs.getString(i+4)!=null && !rs.getString(i+4).equals("")){
 						fn[p++] = rs.getString(i+4);
 					}
@@ -66,7 +68,7 @@ public class DataDAO extends DBConnection{
 		}finally{dbClose();}	
 		return lst;
 	}
-	//���ڵ� ����
+	//레코드 한개 선택
 	public void selectRecord(DataVO vo){
 		try{
 			String sql = "select * from data where num=?";
@@ -87,17 +89,17 @@ public class DataDAO extends DBConnection{
 				vo.setWriteDate(rs.getString(10));
 			}
 		}catch(Exception e){
-			System.out.println("레코드 선택 에러 = "+e.getMessage());
+			System.out.println("레코드 단일 선택 에러 = "+e.getMessage());
 		}finally{
 			dbClose();
 		}
 	}
 
-	//���ڵ� ����
+	//레코드 수정
 	public int updateRecord(DataVO vo,String path){
 		int cnt = 0;
 		try{
-			//��������
+			//파일정리
 			String sql1 = "select filename1, filename2, filename3, filename4, filename5 "
 					+ "from data where num=?";
 			dbConn(sql1);
@@ -108,7 +110,7 @@ public class DataDAO extends DBConnection{
 			int idx=0;
 			if(rs.next()){
 				for(int i=0;i<oldFile.length;i++){
-					if(rs.getString(i+1)!=null){//5���� ���� ���� ����
+					if(rs.getString(i+1)!=null){//5바퀴 돌고 점점 증가
 						oldFile[idx++]=rs.getString(i+1);
 					}
 				}
