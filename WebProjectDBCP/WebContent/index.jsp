@@ -20,6 +20,8 @@
 	Pool - download : commons-pool2-2.4.2-bin.zip
 
 2. http://www.oracle.com 에서
-	ojdbc6.jar를 다운로드 하여 톰캣 서버의 lib와 이클립스 WEB-INF/lib에 복사하고 build path 추가
-	commons-collections4-4.1-bin.zip->commons-collections4-4.1.jar 톰캣 서버의 lib와 이클립스 WEB-INF/lib에 복사
+	ojdbc6.jar를 다운로드 하여 톰캣 서버의 lib와 이클립스 WEB-INF/lib(왼쪽Explorer)에 복사하고 build path 추가
+	commons-collections4-4.1-bin.zip->commons-collections4-4.1.jar-> 톰캣 서버의 lib와 이클립스 WEB-INF/lib에 복사
+	commons-dbcp2-2.1.1-bin.zip->commons-dbcp2-2.1.1.jar-> 톰캣 서버의 lib와 이클립스 WEB-INF/lib에 복사
+	commons-pool2-2.4.2-bin.zip->commons-pool2-2.4.2.jar-> 톰캣 서버의 lib와 이클립스 WEB-INF/lib에 복사
 -->
