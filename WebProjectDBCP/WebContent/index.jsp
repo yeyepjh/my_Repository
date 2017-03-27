@@ -39,5 +39,35 @@
 			  password="tiger"
 			  maxActive="20"
 			  maxIdle="10"
-			  maxWait="-1"/>		
+			  maxWait="-1"/>
+5. ~\tomcat8.5\conf\context.xml의 <Context reloadable="true">로 변경 <ResourceLink> 태그 추가
+	<Context reloadable="true">
+	<ResourceLink global="jdbc/myoracle"
+					name="jdbc/myoracle"
+					type="oracle.jdbc.pool.OracleDataSource"/>	
+					
+6. \tomcat8.5\ (webapps\) root\WEB-INF에 있는 web.xml파일을 복사하여
+	이클립스(Explorer)의 WEB-INF에 붙여넣기 한다.
+	다음, <web-app>태그에 아래 내용을 추가한다.*이클립스 상에서 추가해도 상관없다.
+		<resource-ref>
+			<description>Oracle DataSource example</description>
+			<res-ref-name>jdbc/myoracle</res-ref-name>
+			<res-type>javax.sql.DataSource</res-type>
+			<res-auth>Container</res-auth>	
+		</resource-ref>
+
+7. ~\tomcat8.5\conf\context.xml을 이클립스(Explorer)의 META-INF에 복사-붙여넣기 한다.
+	(4.)에서 생성한 태그를 <Context>태그 안에 붙여넣는다.
+	<Context reloadable="true">
+	<Resource name="jdbc/myoracle"
+			  auth="container"
+			  type="javax.sql.DataSource"
+			  driverClassName="oracle.jdbc.driver.OracleDriver"
+			  url="jdbc:oracle:thin:@localhost:1521:orcl"
+			  username="scott"
+			  password="tiger"
+			  maxActive="20"
+			  maxIdle="10"
+			  maxWait="-1"/>
+
 -->
