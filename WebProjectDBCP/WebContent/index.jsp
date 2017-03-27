@@ -14,10 +14,12 @@
 </body>
 </html>
 <!-- DBCP 셋팅 
-1.http://commons.apache.org
+1. http://commons.apache.org
 	Collection - download : commons-collections4-4.1-bin.zip
 	DBCP - download : commons-dbcp2-2.1.1-bin.zip
 	Pool - download : commons-pool2-2.4.2-bin.zip
 
-
+2. http://www.oracle.com 에서
+	ojdbc6.jar를 다운로드 하여 톰캣 서버의 lib와 이클립스 WEB-INF/lib에 복사하고 build path 추가
+	
 -->
