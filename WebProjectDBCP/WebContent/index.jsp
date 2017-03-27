@@ -24,4 +24,20 @@
 	commons-collections4-4.1-bin.zip->commons-collections4-4.1.jar-> 톰캣 서버의 lib와 이클립스 WEB-INF/lib에 복사
 	commons-dbcp2-2.1.1-bin.zip->commons-dbcp2-2.1.1.jar-> 톰캣 서버의 lib와 이클립스 WEB-INF/lib에 복사
 	commons-pool2-2.4.2-bin.zip->commons-pool2-2.4.2.jar-> 톰캣 서버의 lib와 이클립스 WEB-INF/lib에 복사
+
+3. 환경변수 CLASSPATH 를 다음과 같이 설정한다.
+	.;C:\Program Files\Java\jdk1.8.0_111\lib\tools.jar;C:\Program Files\Apache Software Foundation\Tomcat 8.5\lib\servlet-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 8.5\lib\ojdbc6.jar;C:\Program Files\Apache Software Foundation\Tomcat 8.5\lib\jsp-api.jar;C:\Program Files\Apache Software Foundation\Tomcat 8.5\lib\commons-collections4-4.1.jar;C:\Program Files\Apache Software Foundation\Tomcat 8.5\lib\commons-dbcp2-2.1.1.jar;C:\Program Files\Apache Software Foundation\Tomcat 8.5\lib\commons-pool2-2.4.2.jar;
+	* 이 텍스트는 fileFolder에 보관
+
+4.  ~\tomcat8.5\conf\server.xml의 <GlobalNamingResources>태그 사이에 추가
+		<Resource name="jdbc/myoracle"
+			  auth="container"
+			  type="javax.sql.DataSource"
+			  driverClassName="oracle.jdbc.driver.OracleDriver"
+			  url="jdbc:oracle:thin:@localhost:1521:orcl"
+			  username="scott"
+			  password="tiger"
+			  maxActive="20"
+			  maxIdle="10"
+			  maxWait="-1"/>		
 -->
