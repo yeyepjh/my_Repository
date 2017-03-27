@@ -56,7 +56,7 @@
 <ul class="list-group">
 	<form method="post" action="dataEditOk.jsp" id="dataEdit" enctype="multipart/form-data">
 		<input type="hidden" value="<%=vo.getNum() %>" name="num"/>
-		<input type="hidden" name="delCount" id="delCount"/><!-- 삭제된 파일의 수 -->
+		<input type="hidden" name="delCount" id="delCount" value="0"/><!-- 삭제된 파일의 수 -->
 		<li class="list-group-item">작성자 : 
 		    <input type="text" name="userName" id="userName" value="<%=vo.getUserName() %>"/></li>
 		<li class="list-group-item">제목 : 

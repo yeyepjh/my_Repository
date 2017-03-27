@@ -37,7 +37,21 @@
 	}
 	vo.setDelFile(delName);
 	DataDAO dao = DataDAO.getInstance();
-	int cnt = dao.updateRecord(vo);//DB등록	
-	
+	int cnt = dao.updateRecord(vo, path);//DB등록	
+	if(cnt>0){
+		%>
+		<script>
+			alert("파일이 수정되었습니다.");
+			location.href="dataList.jsp";
+		</script>
+		<%
+	}else{
+		%>
+		<script>
+			alert("파일수정이 실패하였습니다...");
+			history.go(-1);
+		</script>
+		<%
+	}
 	
 %>

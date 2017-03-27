@@ -18,6 +18,16 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+	function delChk(num){
+		var qu = confirm("지금보고 있는 자료를 삭제 하시겠습니까????");
+		if(qu){
+			location.href="dataDelOk.jsp?num="+num;
+		}
+	}
+
+
+</script>
 </head>
 <body>
 <h1>자료실 글내용보기</h1>
@@ -39,7 +49,7 @@
 	</li>
 	<li style="text-align:center">
 		<a href="dataEdit.jsp?num=<%=vo.getNum()%>">수정</a>
-		<a href="">삭제</a>
+		<a href="javascript:delChk(<%=vo.getNum()%>)">삭제</a>
 		<a href="dataList.jsp">자료실목록</a>
 		<a href="<%=request.getContextPath()%>/index.jsp">홈</a>
 	</li>

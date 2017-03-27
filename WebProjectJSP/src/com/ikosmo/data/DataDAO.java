@@ -1,5 +1,6 @@
 package com.ikosmo.data;
 
+import java.io.File;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public class DataDAO extends DBConnection{
 	public static DataDAO getInstance(){
 		return new DataDAO();
 	}
-	//ï¿½ì …?‚„ë¶¾ë±¶ ?•°ë¶½ï¿½
+	//ï¿½ì …?ï¿½ï¿½ë¶¾ë±¶ ?ï¿½ï¿½ë¶½ï¿½
 	public int dataInsert(DataVO vo){
 		int result = 0;
 		try{
@@ -30,11 +31,11 @@ public class DataDAO extends DBConnection{
 			}
 			result = pstmt.executeUpdate();
 		}catch(Exception e){
-			System.out.println("ï¿½ì …?‚„ë¶¾ë±¶ ?•°ë¶½ï¿½ ï¿½ë¿‰ï¿½ìœ­ ="+e.getMessage());
+			System.out.println("ë ˆì½”ë“œ ì‚½ì… ì—ëŸ¬  ="+e.getMessage());
 		}finally{dbClose();}
 		return result;
 	}
-	//ï¿½ì …?‚„ë¶¾ë±¶ ï¿½ìŸ¾ï§£ï¿½ ï¿½ê½‘ï¿½ê¹®
+	//ï¿½ì …?ï¿½ï¿½ë¶¾ë±¶ ï¿½ìŸ¾ï§£ï¿½ ï¿½ê½‘ï¿½ê¹®
 	public List<DataVO> selectAllRecord(){
 		List<DataVO> lst = new ArrayList<DataVO>();
 		try{
@@ -48,7 +49,7 @@ public class DataDAO extends DBConnection{
 				vo.setNum(rs.getInt(1));
 				vo.setUserName(rs.getString(2));
 				vo.setTitle(rs.getString(3));
-				//ï§£â‘¤ï¿½ï¿½?™†ï¿½ì”ªï§ë‚†?“£ ï¿½ï¿½ï¿½ì˜£ï¿½ë¸· è«›ê³—ë¿?
+				//ï§£â‘¤ï¿½ï¿½?ï¿½ï¿½ï¿½ì”ªï§ë‚†?ï¿½ï¿½ ï¿½ï¿½ï¿½ì˜£ï¿½ë¸· è«›ê³—ï¿½?
 				String fn[] = new String[5];
 				int p=0;
 				for(int i=0; i<fn.length; i++){
@@ -61,11 +62,11 @@ public class DataDAO extends DBConnection{
 				lst.add(vo);
 			}			
 		}catch(Exception e){
-			System.out.println("ÀüÃ¼ ·¹ÄÚµå ¼±ÅÃ ¿¡·¯ = "+e.getMessage());
+			System.out.println("ë ˆì½”ë“œ ì „ì²´ ì„ íƒ ì—ëŸ¬ = "+e.getMessage());
 		}finally{dbClose();}	
 		return lst;
 	}
-	//·¹ÄÚµå ¼±ÅÃ
+	//ï¿½ï¿½ï¿½Úµï¿½ ï¿½ï¿½ï¿½ï¿½
 	public void selectRecord(DataVO vo){
 		try{
 			String sql = "select * from data where num=?";
@@ -86,17 +87,17 @@ public class DataDAO extends DBConnection{
 				vo.setWriteDate(rs.getString(10));
 			}
 		}catch(Exception e){
-			System.out.println("·¹ÄÚµå ¼±ÅÃ¿¡·¯ = "+e.getMessage());
+			System.out.println("ë ˆì½”ë“œ ì„ íƒ ì—ëŸ¬ = "+e.getMessage());
 		}finally{
 			dbClose();
 		}
 	}
 
-	//·¹ÄÚµå ¼öÁ¤
-	public int updateRecord(DataVO vo){
+	//ï¿½ï¿½ï¿½Úµï¿½ ï¿½ï¿½ï¿½ï¿½
+	public int updateRecord(DataVO vo,String path){
 		int cnt = 0;
 		try{
-			//ÆÄÀÏÁ¤¸®
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			String sql1 = "select filename1, filename2, filename3, filename4, filename5 "
 					+ "from data where num=?";
 			dbConn(sql1);
@@ -107,42 +108,116 @@ public class DataDAO extends DBConnection{
 			int idx=0;
 			if(rs.next()){
 				for(int i=0;i<oldFile.length;i++){
-					if(rs.getString(i+1)!=null){//5¹ÙÄû µ¹°í Á¡Á¡ Áõ°¡
+					if(rs.getString(i+1)!=null){//5ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 						oldFile[idx++]=rs.getString(i+1);
 					}
 				}
 			}
-			//¿ø·¡ ÆÄÀÏ°ú »õ·Î ¾÷·ÎµåµÈ ÆÄÀÏ »èÁ¦µÈ ÆÄÀÏÀ» ÇÑ°³ÀÇ ¹è¿­·Î Á¤¸®
-			String newFile[] = vo.getFileName();
+			//ì›ë˜íŒŒì¼ê³¼ ìƒˆë¡œ ì—…ë¡œë“œ ëœ íŒŒì¼ ì‚­ì œëœ íŒŒì¼ì„ í•œê°œì˜ ë°°ì—´ ì •ë¦¬ã…‹
+			String newFile[] = new String[5];//ìƒˆë¡œ ì—…ë¡œë“œ ëœ íŒŒì¼
+			String fileName[] = vo.getFileName();
 			int idx1=0;
-			System.out.println(newFile);
-			for(int c=0;c<newFile.length;c++){//Ã·ºÎµÈ ÆÄÀÏÀÇ ¼ö¸¦ ±¸ÇÏ±â
-				if(newFile[c]==null){
-					idx1=c;
-					break;
+			
+			for(int i=0;i<fileName.length;i++){//ìƒˆë¡œ ì—…ë¡œë“œ ëœ íŒŒì¼
+				if(fileName[i]!=null && !(fileName[i].equals(""))){
+					newFile[idx1] = fileName[i];
+					idx1++;//ì²¨ë¶€íŒŒì¼ìˆ˜
+					
 				}
 			}
-			for(int i=0;i<newFile.length;i++){	
-				System.out.println("["+i+"]"+newFile[i]);
-			}	
-			//DBÀÇ ÆÄÀÏ¸íÀÌ »èÁ¦ ¸ñ·Ï¿¡ ÀÖ´ÂÁö È®ÀÎÈÄ ¾øÀ¸¸é newFile¿¡ Ãß°¡
+			
+			//DBì˜ íŒŒì¼ëª…ì´ ì‚­ì œ ëª©ë¡ì— ìˆëŠ” í™•ì¸í›„ ì—†ìœ¼ë©´ newFileì— ì¶”ê°€
 			String delFile[] = vo.getDelFile();
 			for(int i=0;i<oldFile.length;i++){
 				int del=0;
-				for(int j=0;j<delFile.length;j++){
-					if(oldFile[i]!=null&&delFile[j]!=null && oldFile[i].equals(delFile[j])){
-						del++;
-					}
+				if(oldFile[i]!=null){
+					for(int j=0;j<delFile.length;j++){
+						if(delFile[j]!=null &&oldFile[i].equals(delFile[j])){
+							del++;
+						}					
+					}						
 					if(del==0)newFile[idx1++] = oldFile[i];
-				}						
-				System.out.println("["+i+"]"+oldFile[i]);
+				}
+			}
+			
+			/* ì¶”ê°€ëœ íŒŒì¼ì´ë¦„ í™•ì¸
+			 * for(int i=0;i<newFile.length;i++){
+			 * System.out.println("["+i+"]"+newFile[i]);
+			}*/	
+			
+			sql1= "update data set userName=?, title=?, content=?, "
+					+ "filename1=?, filename2=?, filename3=?, filename4=?, filename5=? "
+					+ "where num=?";
+			pstmt=con.prepareStatement(sql1);
+			pstmt.setString(1, vo.getUserName());
+			pstmt.setString(2, vo.getTitle());
+			pstmt.setString(3, vo.getContent());
+			for(int k=0; k<newFile.length; k++){
+				pstmt.setString(k+4, newFile[k]);
+			}pstmt.setInt(9, vo.getNum());
+			
+			cnt=pstmt.executeUpdate();
+			if(cnt>0){//ìˆ˜ì •ë˜ì—ˆì„ë•Œ... ìˆ˜ì •í•˜ë©´ì„œ ì‚¬ë¼ì§„ íŒŒì¼ì„ dbì—ì„œ ì‚­ì œí•œë‹¤.
+				for(int z=0; z<delFile.length; z++){
+					if(delFile[z]!=null&&!delFile[z].equals("")){
+						File ff = new File(path,delFile[z]); //path : ì ˆëŒ€ê²½ë¡œ
+						ff.delete();
+					}
+				}
+				con.commit();			
+				
+			}else{//ìˆ˜ì •ì‹¤íŒ¨ì‹œ ìƒˆë¡œ ì„ íƒí•œ ì²¨ë¶€íŒŒì¼ì„ ì‚­ì œ í•œë‹¤. ë ˆì½”ë“œëŠ” ê³ ì³ì¡Œì§€ë§Œ íŒŒì¼ì€ ë°”ê¾¼ìƒí™©
+				for(int z=0; z<fileName.length;z++){
+					if(fileName[z]!=null&&!fileName[z].equals("")){
+						File ff = new File(path,fileName[z]);
+					}					
+				}
+				con.rollback();
 			}
 		}catch(Exception e){
-			System.out.println("·¹ÄÚµå ¼öÁ¤ ¿¡·¯ ="+e.getMessage());
+			System.out.println("ë ˆì½”ë“œ ìˆ˜ì • ì—ëŸ¬  ="+e.getMessage());
+			try{
+				con.rollback();
+			}catch(Exception ee){System.out.println("rollback(*)ì—ëŸ¬ ë°œìƒ");}
+			
 		}finally{
 			dbClose();
 		}
 		return cnt;		
+	}
+	//ì‚­ì œ - ì²¨ë¶€íŒŒì¼ë“¤ì˜ ì´ë¦„ì„ êµ¬í•˜ê³  ì‚­ì œí•œë‹¤.
+	public int deleteRecord(int num, String path){
+		int cnt=0;
+		try{
+			String sql = "select filename1, filename2, filename3, filename4, filename5 from data where num=?";
+			dbConn(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			String[] filename = new String[5];
+			if(rs.next()){
+				for(int i=0;i<filename.length;i++){
+					filename[i] = rs.getString(i+1);
+				}				
+			}
+			//// ë ˆì½”ë“œ ì‚­ì œ ì¿¼ë¦¬
+			sql = "delete from data where num=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			cnt = pstmt.executeUpdate();
+			if(cnt>0){////ë ˆì½”ë“œê°€ ì§€ì›Œì¡Œë‹¤ëŠ” ì •ë³´ë¥¼ ê·¼ê±°ë¡œ íŒŒì¼ì„ ì§€ìš´ë‹¤.
+				for(int i=0;i<filename.length;i++){
+					if(filename[i]!=null && !filename[i].equals("")){					
+						File f= new File(path, filename[i]);
+						f.delete();
+					}
+				}
+			}
+		}catch(Exception e){
+			System.out.println("ë ˆì½”ë“œ ì‚­ì œ ì‹¤íŒ¨ = "+e.getMessage());
+		}finally{
+			dbClose();
+		}
+		return cnt;
 	}
 	
 }
