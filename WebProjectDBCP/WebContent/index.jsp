@@ -21,5 +21,5 @@
 
 2. http://www.oracle.com 에서
 	ojdbc6.jar를 다운로드 하여 톰캣 서버의 lib와 이클립스 WEB-INF/lib에 복사하고 build path 추가
-	
+	commons-collections4-4.1-bin.zip->commons-collections4-4.1.jar 톰캣 서버의 lib와 이클립스 WEB-INF/lib에 복사
 -->
