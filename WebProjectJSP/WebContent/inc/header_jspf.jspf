@@ -1,0 +1,15 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%
+    	String name = "hong 길동";
+        int age = 25;
+    %>
+<style>
+	#header{height:100px;background-color:yellow;text-align:center}
+	#footer{height:50px; background-color:pink; line-height:50px;
+	    text-align:center}
+</style>
+<div id="header">
+	<a href="#">로그인</a> / 
+	<a href="#">홈</a>
+</div>

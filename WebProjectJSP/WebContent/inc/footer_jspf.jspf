@@ -1,0 +1,10 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<style>
+	
+</style>
+<div id="footer">
+	<a href="#">주소 : 서울시 금천구 가산동 월드메르디앙 벤쳐 2차</a> / 
+	<a href="#">찾아오는 길</a> 
+	<%=name %>=<%=age %>
+</div>
